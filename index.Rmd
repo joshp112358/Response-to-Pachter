@@ -705,7 +705,7 @@ The top 11 departments using this ranking are:
 
 11. University of California - Berkeley
 
-We calculate the average citations/average year since PhD of letters A, B, and C, and compare them to our ranked list. 
+We calculate the average citations per year since PhD of letters A, B, and C, and compare them to our ranked list. 
 
 ```{r, echo = FALSE, include = FALSE}
 mean(filter(df, ((lettergroup == "A Only"|lettergroup == "A and B")&(role=="professor")&(field=="math")))$amscitperyear, na.rm = TRUE)
