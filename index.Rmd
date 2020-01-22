@@ -3,10 +3,10 @@ title: "Response to Pachter’s Review"
 author: "Joshua Paik and Igor Rivin"
 date: "1/22/2020"
 output:
-  html_document:
-    toc: yes
   pdf_document:
     keep_tex: yes
+    toc: yes
+  html_document:
     toc: yes
 ---
 
@@ -63,7 +63,7 @@ restrictedData1 <- filter(df1, (institution=="domesticr1"&role=="professor"&fiel
 vis_miss(restrictedData1)
 ```
 
-One sees that 17.34% of the Math Sci Net citations data is missing. It appears there was some sort of systemtatic but unintentional error in the data collection from MathSciNet. We report 3 NaNs on A and B, 3 on A only, 0 on B and C, 50 on B Only, and 0 on C only. We manually checked the missing data and find that all but [Marta Civil](https://www.math.arizona.edu/~civil/) and [Jeffrey X Watt](https://science.iupui.edu/people/watt-jeffrey) (who are math educators) have Math Sci Net entries. The remaining omissions are fixed and we visually check for NaNs again. 
+One sees that 17.34% of the Math Sci Net citations data is missing. It appears there was some sort of systematic but unintentional error in the data collection from MathSciNet. We report 3 NaNs on A and B, 3 on A only, 0 on B and C, 50 on B Only, and 0 on C only. We manually checked the missing data and find that all but [Marta Civil](https://www.math.arizona.edu/~civil/) and [Jeffrey X Watt](https://science.iupui.edu/people/watt-jeffrey) (who are math educators) have Math Sci Net entries. The remaining omissions are fixed and we visually check for NaNs again. 
 
 ```{r, warning=FALSE, echo = FALSE, include = FALSE}
 table(restrictedData1$lettergroup[is.na(restrictedData1$amscit)])
