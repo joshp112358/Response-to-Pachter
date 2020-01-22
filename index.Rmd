@@ -3,10 +3,10 @@ title: "Response to Pachter’s Review"
 author: "Joshua Paik and Igor Rivin"
 date: "1/22/2020"
 output:
+  html_document:
+    toc: yes
   pdf_document:
     keep_tex: yes
-    toc: yes
-  html_document:
     toc: yes
 ---
 
@@ -575,7 +575,7 @@ Dist <- matrix(0,nrow=1,ncol=1000)
 for (i in 1:1000){
   Dist[,i]<-ageMatchedRandom()
 }
-hist(Dist, main="Age Matched Test Google Scholar Citations without Lior Pachter ")
+hist(Dist, main="Age Matched Test Google Scholar Citations \n without Lior Pachter ")
 ```
 
 ```{r, echo=FALSE, include=FALSE}
@@ -655,7 +655,7 @@ plot(x.age.range,x.c,
   type="l",
   col="chartreuse3",
   ylim=c(0,7000),
-  main="Average citations of Professors beneath specified years since PhD \n (Lior Pachter removed)",
+  main="Average citations of Professors as a function of PhD Age \n (Lior Pachter removed)",
   ylab="mean citations",
   xlab="PhD age",
   lwd=2)
