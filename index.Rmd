@@ -720,7 +720,7 @@ legend("topleft",
   fill=c("red","chartreuse3"))
 ```
 
-So it is clear that Pachter's analysis was some sort of magic trick, potentially a thought experiment, and a fraudulent one. It is highly unlikely that a tenured and respected expert in computation and statistics did not know the above result, expecially when a student he suggests take an introductory statistics course immediately spotted it. We claim and assert that he purposefully chose his 36 cutoff to try to undermine our results.  
+So it is clear that Pachter's analysis was some sort of magic trick, potentially a thought experiment, and a misleading one. It is highly unlikely that a tenured and respected expert in computation and statistics did not know the above result, expecially when a student he suggests take an introductory statistics course immediately spotted it. We claim and assert that he purposefully chose his 36 cutoff to try to undermine our results.  
 
 ## Tier Rankings
 
