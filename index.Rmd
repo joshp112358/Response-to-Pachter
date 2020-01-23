@@ -1,7 +1,7 @@
 ---
 title: "Response to Pachter’s Review"
 author: "Joshua Paik and Igor Rivin"
-date: "1/22/2020"
+date: '1/22/2020, Last Update: 1/23/2020 3:16 A.M. G.M.T.'
 output:
   pdf_document:
     keep_tex: yes
@@ -19,7 +19,6 @@ output:
 knitr::opts_chunk$set(fig.width=6, fig.height=4) 
 ```
 
-Last Update: January 23rd 3:16 A.M. G.M.T.
 
 ```{r, echo = FALSE, warning = FALSE, include = FALSE}
 library(readr)
