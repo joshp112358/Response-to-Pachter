@@ -19,7 +19,7 @@ output:
 knitr::opts_chunk$set(fig.width=6, fig.height=4) 
 ```
 
-
+Last Update: January 23rd 2:50 A.M. 
 
 ```{r, echo = FALSE, warning = FALSE, include = FALSE}
 library(readr)
@@ -675,6 +675,51 @@ df.c.trimmed <- subset(df, ((lettergroup == "C Only"|lettergroup == "B and C")&(
 
 ```
 
+Perhaps removing Lior was a confounder. So we remove the top five mathematicians from C. 
+
+```{r, echo = FALSE}
+x.youngest.age <- 15
+x.oldest.age <-65
+x.age.range <- x.youngest.age:x.oldest.age
+year.span <- x.oldest.age - x.youngest.age
+x.a <- vector(mode="numeric", length=year.span)
+x.b <- vector(mode="numeric", length=year.span)
+x.c <- vector(mode="numeric", length=year.span)
+
+
+a.trim <- tail(sort(filter(df, ((lettergroup == "A Only"|lettergroup == "A and B")&(role=="professor")&(age < 100)))$citations),1)
+c.trim <- tail(sort(filter(df, ((lettergroup == "C Only"|lettergroup == "B and C")&(role=="professor")&(age < 100)))$citations),5)
+df.a.trimmed <- subset(df, ((lettergroup == "A Only"|lettergroup == "A and B")&(role=="professor")&(age < 100)&(!is.na(citations))&!(citations %in% a.trim)))
+df.c.trimmed <- subset(df, ((lettergroup == "C Only"|lettergroup == "B and C")&(role=="professor")&(age < 100)&(!is.na(citations))&!(citations %in% c.trim)))
+
+x.a <- 0
+x.b <- 0
+x.c <- 0
+
+
+for (x.age in x.age.range)
+{
+  x.a[1+x.age - x.youngest.age] <- mean(filter(df.a.trimmed, (age <= x.age))$citations, na.rm = TRUE)
+  x.c[1+x.age - x.youngest.age] <- mean(filter(df.c.trimmed, (age <= x.age))$citations, na.rm = TRUE)
+}
+
+plot(x.age.range,x.c,
+  type="l",
+  col="chartreuse3",
+  ylim=c(0,7000),
+  main="Average citations of Professors as a function of age \n (Lior Pachter Removed, \n and 5 highest cited of Letter C removed)",
+  ylab="mean citations",
+  xlab="PhD age",
+  lwd=2)
+lines(x.age.range,x.a,
+  type="l",
+  col="red",
+  lwd=2)
+legend("topleft",
+  c("Letter A","Letter C"),
+  fill=c("red","chartreuse3"))
+```
+
 So it is clear that Pachter's analysis was some sort of magic trick, potentially a thought experiment, and a fraudulent one. It is highly unlikely that a tenured and respected expert in computation and statistics did not know the above result, expecially when a student he suggests take an introductory statistics course immediately spotted it. We claim and assert that he purposefully chose his 36 cutoff to try to undermine our results.  
 
 ## Tier Rankings
@@ -727,7 +772,7 @@ An astute observer would notice we are not exactly comparing apples to apples. P
 
 ## Discussion and Conclusion
 
-We have debunked the claim that age is the greatest contributor for the difference in citations and citations per year between signers of Letter A, B, and C. Indeed, the least meritorious of mathematicians as a whole signed letter A, whereas the more meritorious signed letters B and C, with merit judged by citations. If one was not willing to believe citations impose even a small order on merit, one could replace citations with Fields medals, AMS Fellowships, or many other metrics. One could make extrapolations by coupling this analysis with work by Topaz, but we refrain from doing so. 
+We have debunked the claim that age is the greatest contributor for the difference in citations and citations per year between signers of Letter A, B, and C. Indeed, the least meritorious of mathematicians as a whole signed letter A, whereas the more meritorious signed letters B and C, with merit judged by citations. If one was not willing to believe citations impose even a small order on merit, one could replace citations with Fields medals, AMS Fellowships, or many other metrics. 
 
 In this analysis, we have addressed most of the criticisms in Pachter's review, acknowledging our errors when pointed, while rejecting his false claim that age was the greatest confounder. The only one we have not addressed is his point that, "several p-values are computed and reported without any multiple testing correction." After consultation with a respected statistician, we do not see what the issue is. We reported every p-value and he is welcome to change the set.seed in our code, which he applauds us as easily reproducible. 
 
