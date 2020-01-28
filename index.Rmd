@@ -1,12 +1,12 @@
 ---
 title: "Response to Pachter’s Review"
 author: "Joshua Paik and Igor Rivin"
-date: '1/22/2020, Last Update: 1/23/2020 3:16 A.M. G.M.T.'
+date: '1/22/2020, Last Update: 1/28/2020 6:00 P.M. G.M.T.'
 output:
+  html_document:
+    toc: yes
   pdf_document:
     keep_tex: yes
-    toc: yes
-  html_document:
     toc: yes
 ---
 
@@ -51,7 +51,7 @@ We appreciate Professor Pachter's review - it gives us a chance to make our anal
 
 ## Corrections and Clarifications
 
-We would like to thank Lior for finding the bug in our appendix which pushes the mean Google Scholar citations of B further away from A. We agree that the sentence - “while this is not optimal, a quick sample size calculation shows that one needs 303 samples or 21% of the data to produce statistics at a 95% confidence level and a 5% confidence interval.” - is ridiculous. 
+We would like to thank Pachter for finding the bug in our appendix which pushes the mean Google Scholar citations of B further away from A. We agree that the sentence - “while this is not optimal, a quick sample size calculation shows that one needs 303 samples or 21% of the data to produce statistics at a 95% confidence level and a 5% confidence interval.” - is ridiculous. 
 
 We should explain exactly how the data collection took place. We used the [scholarly api](https://pypi.org/project/scholarly/) to initially collect our Google Scholar citations data. But the issues were that the scraper did not accurately differentiate between those who had a generic name and the observed fact that older mathematicians (like Cheeger or Gromov) do not have Google Scholar citations. To assure data quality, we manually checked the google scholar citations of every single letter signer, comparing publications when necessary.
 
@@ -102,7 +102,7 @@ Now that we are comparing apples to apples, we reperform the main results.
 
 ## The Main Result of Paik-Rivin: R1 Math Professors Citations and Citations per Year
 
-We will compare the mean number of citations and citations per year between signers of Letters A, B, and C. We will validate the significance of the difference between signers using a [permutation test](https://en.wikipedia.org/wiki/Resampling_(statistics)#Permutation_tests). 
+We will compare the mean number of citations and citations per year (that is years elapsed since completion of PhD) between signers of Letters A, B, and C. We will validate the significance of the difference between signers using a [permutation test](https://en.wikipedia.org/wiki/Resampling_(statistics)#Permutation_tests). 
 
 The following is copy and pasted from our paper (with edit in parentheses):
 
@@ -319,7 +319,7 @@ par(mfrow=c(1,1)) # Change back to 1 x 1
 ```
 
 ```{r, echo = FALSE}
-plot(df$age,df$amscitperyear, main = "Age vs. MSN Citations per Year Revised Dataset")
+plot(df$age,df$amscitperyear, main = "MSN Citations per Year vs Age Revised Dataset")
 abline(linearmodel1, col = "red")
 ```
 
@@ -357,10 +357,10 @@ We manually collected the citations and year of first publication of every R1 fu
 Many aspects of this dataset can, should, and will be analyzed. For now, the following will suffice. 
 
 ### Citations per Year vs Age
-We plot the Age vs Citations per Year for all math R1. We generate a linear regression model and output a 95% confidence interval for the slope. 
+We plot the Citations per Year vs Age for all math R1. We generate a linear regression model and output a 95% confidence interval for the slope. 
 ```{r, echo=FALSE}
 linearmodel2 <- lm(allR1$citperyear ~ allR1$age, data = allR1)
-plot(allR1$age, allR1$citperyear, main="Age vs Citations per Year All Math R1")
+plot(allR1$age, allR1$citperyear, main="Citations per Year vs Age All Math R1")
 abline(linearmodel2,col="red") 
 ```
 
@@ -368,7 +368,7 @@ abline(linearmodel2,col="red")
 confint(linearmodel2)
 ```
 
-So while visually it appears that there is no correlation between citations and citations per year, one may object and say, the slope is positive! Which leads to the following question.
+So while visually it appears that there is no correlation between year and citations per year, one may object and say, the slope is positive! Which leads to the following question.
 
 **Question: To what power must we raise age to get zero within the confidence interval of slope.** 
 
@@ -457,7 +457,7 @@ The induced p-value for hypothesis 1 is 0. The induced p-value for hypothesis 2 
 
 ## One more check that age is irrelevant when comparing citations
 
-This method was suggested by a friend as a final check to eliminate any question that age was the greatest confounder. We want to show that $\mu(A) < \mu(B \cup C)$. We will randomly sample a population of 20 from A, called $X$. For each member $x \in X$, we will find every person from B and C that is within a two year age interval from $x$. We will randomly sample one, and induce a new population $Y$. Then we will compare the means by storing X-Y. We repeat this 1,000 times and plot a histogram of the induced values. If 0 is within this new distribution, then maybe there is a chance, a totally slim one after above, that in fact age is a confounder. If the distribution is primarily negative, then X < Y. Otherwise X > Y. We perform this analysis with both AMS citations and Google Scholar citations. 
+This method was suggested by a friend as a final check to eliminate any question that age was the greatest confounder. We want to show that $\mu(A) < \mu(B \cup C)$. We will randomly sample a population of 20 from A, called $X$. For each member $x \in X$, we will find every person from B and C that is within a four year age interval from $x$. We will randomly sample one, and induce a new population $Y$. Then we will compare the means by storing X-Y. We repeat this 1,000 times and plot a histogram of the induced values. If 0 is within this new distribution, then maybe there is a chance, a totally slim one after above, that in fact age is a confounder. If the distribution is primarily negative, then X < Y. Otherwise X > Y. We perform this analysis with both AMS citations and Google Scholar citations. 
 
 ```{r, echo=FALSE}
 #with amscit
@@ -765,13 +765,13 @@ The average Math Sci Net Citations per year (PhD Age) is:
 
 3. For letter C - 55.5451
 
-Temple has an average citations per year of 12.33, so we retract our claim that letter A is comparable to Temple. It is closer to the University of Massachusetts - Amherst  which has an average citations per year of 16.17. By [US News](https://www.usnews.com/best-graduate-schools/top-science-schools/mathematics-rankings), University of Massachusetts - Amherst's Math Department has a rank of 55. Rutgers has an average citations per year of 35.01, so we retract our claim that letter B is comparable to Rutgers. It is closer to the University of Minesotta which has an average citations per year of 42.07 and a US News Ranking of 19. For Letter C, we claimed that it was another tier higher - indeed it is closer to the University of Chicago, which has an average citations per year of 56.27, ranked 6 by US News. 
+Temple has an average citations per year of 12.33, so we retract our claim that letter A is comparable to Temple. It is closer to the University of Massachusetts - Amherst  which has an average citations per year of 16.17. By [US News](https://www.usnews.com/best-graduate-schools/top-science-schools/mathematics-rankings), University of Massachusetts - Amherst's Math Department has a rank of 55. Rutgers has an average citations per year of 35.01, so we retract our claim that letter B is comparable to Rutgers. It is closer to the University of Minesota which has an average citations per year of 42.07 and a US News Ranking of 19. For Letter C, we claimed that it was another tier higher - indeed it is closer to the University of Chicago, which has an average citations per year of 56.27, ranked 6 by US News. 
 
-An astute observer would notice we are not exactly comparing apples to apples. Presumably ones first publication could be before one finishes their PhD. So even with the boost, the order amongst letter signers stands. 
+An astute observer would notice we are not exactly comparing apples to apples. Presumably one's first publication could be before one finishes their PhD. So even with the boost, the order amongst letter signers stands. 
 
 ## Discussion and Conclusion
 
-We have debunked the claim that age is the greatest contributor for the difference in citations and citations per year between signers of Letter A, B, and C. Indeed, the least meritorious of mathematicians as a whole signed letter A, whereas the more meritorious signed letters B and C, with merit judged by citations. If one was not willing to believe citations impose even a small order on merit, one could replace citations with Fields medals, AMS Fellowships, or many other metrics. 
+We have debunked the claim that age is the confounder for the difference in citations and citations per year between signers of Letter A, B, and C. Indeed, the least meritorious of mathematicians as a whole signed letter A, whereas the more meritorious signed letters B and C, with merit judged by citations. If one was not willing to believe citations impose even a small order on merit, one could replace citations with Fields medals, AMS Fellowships, or many other metrics. 
 
 In this analysis, we have addressed most of the criticisms in Pachter's review, acknowledging our errors when pointed, while rejecting his false claim that age was the greatest confounder. The only one we have not addressed is his point that, "several p-values are computed and reported without any multiple testing correction." After consultation with a respected statistician, we do not see what the issue is. We reported every p-value and he is welcome to change the set.seed in our code, which he applauds us as easily reproducible. 
 
