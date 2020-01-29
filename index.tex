@@ -122,7 +122,7 @@
   \postauthor{\par}
       \predate{\centering\large\emph}
   \postdate{\par}
-    \date{1/22/2020, Last Update: 1/23/2020 3:16 A.M. G.M.T.}
+    \date{1/22/2020, Last Update: 1/28/2020 6:00 P.M. G.M.T.}
 
 
 \begin{document}
@@ -132,11 +132,6 @@
 \setcounter{tocdepth}{2}
 \tableofcontents
 }
-\begin{quote}
-\emph{``Academic politics are so vicious precisely because the stakes
-are so small.''} - Henry Kissinger
-\end{quote}
-
 \begin{quote}
 \emph{``The value of preprints is in their ability to accelerate
 research via the rapid dissemination of methods and discoveries.''} -
@@ -175,7 +170,7 @@ attacked, we thought it was appropriate to reply as quickly as possible.
 \subsection{Corrections and
 Clarifications}\label{corrections-and-clarifications}}
 
-We would like to thank Lior for finding the bug in our appendix which
+We would like to thank Pachter for finding the bug in our appendix which
 pushes the mean Google Scholar citations of B further away from A. We
 agree that the sentence - ``while this is not optimal, a quick sample
 size calculation shows that one needs 303 samples or 21\% of the data to
@@ -228,39 +223,31 @@ and Citations per
 Year}\label{the-main-result-of-paik-rivin-r1-math-professors-citations-and-citations-per-year}}
 
 We will compare the mean number of citations and citations per year
-between signers of Letters A, B, and C. We will validate the
-significance of the difference between signers using a
+(that is years elapsed since completion of PhD) between signers of
+Letters A, B, and C. We will validate the significance of the difference
+between signers using a
 \href{https://en.wikipedia.org/wiki/Resampling_(statistics)\#Permutation_tests}{permutation
 test}.
 
-The following is copy and pasted from our paper (with edit in
-parentheses):
+A permutation test is a non-parametric means of assessing the
+significance test of a population. Throughout this section, we will be
+comparing the mean citations of two populations, X and Y. We will work
+under the assumption that our null hypothesis is
+\(H_0: \mu(X) = \mu(Y)\), and our alternative is
+\(H_1: \mu(X) < \mu(Y)\).
 
-A permutation test is a nonparametric way of assessing the difference in
-mean between two populations. We are interested in whether an observed
-difference in mean is due to chance, and we can assess this in the
-following way.
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\setcounter{enumi}{-1}
-\tightlist
-\item
-  Record the true difference in mean (or median) (\(d\mu\)).
-\item
-  \(H_0: d\mu = 0, H_1: d\mu < 0\)
-\item
-  Sample without replacement 1/2 of the combined data set (X) and what
-  is left (Y)
-\item
-  Take the mean (or median) of X and Y and record the difference
-\item
-  Repeat 10,000 times and plot the histogram
-\item
-  Record the number of points (m) in the induced distribution that is
-  more extreme than or equal to the observed \(d\mu\). The probability
-  m/10,000 is the probability that what was observed was due to chance.
-\end{enumerate}
+A permutation test works as follows. Let \(X\) and \(Y\) be our relevant
+populations, of size \(n_X\) and \(n_Y\). We would like to know whether
+we can accept that the observed difference in means was not due to
+chance. We record the observed difference in means as
+\(\delta = \mu(X) - \mu(Y)\). We then take the union of our two
+population, \(Z = X \cup Y\), and randomly partition \(Z\) into two new
+sets \(A\) and \(B\), where \(|A| = n_X\) and \(|B| = n_Y\). We store
+\(\mu(X)-\mu(Y)\) and induce a distribution \(D\) of potential
+differences and repeat the process \(n=10,000\) times. We can induce the
+p-value, or the probability that our observed difference was due to
+chance by the probability
+\(p = |\{d:d\leq \delta, \forall d \in D\}|/n\).
 
 \hypertarget{mathscinet-citations-for-r1-math-professors}{%
 \subsubsection{MathSciNet Citations for R1 Math
@@ -285,15 +272,8 @@ The three hypotheses we would like to assess are:
   \(H_0: \mu(A) = \mu(C), H_1: \mu(A) < \mu(C)\)
 \end{enumerate}
 
-In the following figure, the vertical red bar is the observed difference
-for hypothesis 1 in the induced distribution, blue is the observed
-difference for hypothesis 2, and green is the observed difference for
-hypothesis 3.
-
-\includegraphics{index_files/figure-latex/unnamed-chunk-12-1.pdf}
-
 The induced p-value for hypothesis 1 is 0. The induced p-value for
-hypothesis 2 is 0.0002. The induced p-value for hypothesis 3 is 0. Hence
+hypothesis 2 is 0.0016. The induced p-value for hypothesis 3 is 0. Hence
 we reject all three null hypotheses in favor of the alternative, and
 \(\mu(A) < \mu(B) < \mu(C)\).
 
@@ -306,7 +286,7 @@ calculated citations per year. There may be objections to this - one
 could hypothesize that citations per year grow with age - but we will
 soon thoroughly reject this claim.
 
-\includegraphics{index_files/figure-latex/unnamed-chunk-14-1.pdf}
+\includegraphics{index_files/figure-latex/unnamed-chunk-13-1.pdf}
 
 The mean number of citations per year for signers of letter A is 16 and
 the median is 11. The mean number of citations per year for signers of
@@ -325,23 +305,10 @@ The three hypotheses we would like to assess are:
   \(H_0: \mu(A_{citperyear}) = \mu(C_{citperyear}), H_1: \mu(A_{citperyear}) < \mu(C_{citperyear})\)
 \end{enumerate}
 
-As above, the vertical red bar is the observed difference for hypothesis
-1 in the induced distribution, blue is the observed difference for
-hypothesis 2, and green is the observed difference for hypothesis 3.
-
-\includegraphics{index_files/figure-latex/unnamed-chunk-16-1.pdf}
-
 The induced p-value for hypothesis 1 is 0. The induced p-value for
-hypothesis 2 is 0.0099. The induced p-value for hypothesis 3 is 0. Hence
-we reject all three null hypotheses, even assessing the induced p-value
-at a 2\% significance level, in favor of the alternative, and we
-conclude that
-\(\mu(A_{citperyear}) < \mu(B_{citperyear}) < \mu(C_{citperyear})\).
-
-One may object of our usage of the mean here, opposed to the median. So
-we reperform the permutation test with the median. All three induced
-p-values are 0 so we can reject all three null hypotheses when comparing
-median citations per year.
+hypothesis 2 is 0.07788. The induced p-value for hypothesis 3 is 0.
+Hence we reject hypothesis 1 and 3, and conclude that
+\(\mu(A_{citperyear}) < \mu(B_{citperyear}) \leq \mu(C_{citperyear})\).
 
 \hypertarget{there-is-no-evidence-that-citations-per-year-grows-with-age}{%
 \subsection{There is no evidence that Citations per Year grows with
@@ -350,7 +317,7 @@ age}\label{there-is-no-evidence-that-citations-per-year-grows-with-age}}
 Let us check whether there is a relationship between age and citations
 per year in our limited dataset.
 
-\includegraphics{index_files/figure-latex/unnamed-chunk-22-1.pdf}
+\includegraphics{index_files/figure-latex/unnamed-chunk-18-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -409,9 +376,9 @@ the following will suffice.
 \subsubsection{Citations per Year vs
 Age}\label{citations-per-year-vs-age}}
 
-We plot the Age vs Citations per Year for all math R1. We generate a
+We plot the Citations per Year vs Age for all math R1. We generate a
 linear regression model and output a 95\% confidence interval for the
-slope. \includegraphics{index_files/figure-latex/unnamed-chunk-27-1.pdf}
+slope. \includegraphics{index_files/figure-latex/unnamed-chunk-23-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -425,9 +392,9 @@ slope. \includegraphics{index_files/figure-latex/unnamed-chunk-27-1.pdf}
 ## allR1$age    0.2515584  0.48675
 \end{verbatim}
 
-So while visually it appears that there is no correlation between
-citations and citations per year, one may object and say, the slope is
-positive! Which leads to the following question.
+So while visually it appears that there is no correlation between year
+and citations per year, one may object and say, the slope is positive!
+Which leads to the following question.
 
 \textbf{Question: To what power must we raise age to get zero within the
 confidence interval of slope.}
@@ -436,7 +403,7 @@ We object to this question, because the implication of the question is,
 by how much should we discount the accomplishments of those who are
 older. Nevertheless, we proceed.
 
-\includegraphics{index_files/figure-latex/unnamed-chunk-30-1.pdf}
+\includegraphics{index_files/figure-latex/unnamed-chunk-26-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -459,7 +426,7 @@ year\^{}1.3.
 \subsubsection{Citations per Year adjusting for fitted handicap on
 age}\label{citations-per-year-adjusting-for-fitted-handicap-on-age}}
 
-\includegraphics{index_files/figure-latex/unnamed-chunk-32-1.pdf}
+\includegraphics{index_files/figure-latex/unnamed-chunk-28-1.pdf}
 
 The mean number of citations per year\^{}1.3 for signers of letter A is
 6 and the median is 4. The mean number of citations per year\^{}1.3 for
@@ -479,17 +446,11 @@ The three hypotheses we would like to assess are:
   \(H_0: \mu(A_{citperyear^{1.3}}) = \mu(C_{citperyear^{1.3}}), H_1: \mu(A_{citperyear^{1.3}}) < \mu(C_{citperyear^{1.3}})\)
 \end{enumerate}
 
-As above, the vertical red bar is the observed difference for hypothesis
-1 in the induced distribution, blue is the observed difference for
-hypothesis 2, and green is the observed difference for hypothesis 3.
-
-\includegraphics{index_files/figure-latex/unnamed-chunk-34-1.pdf}
-
 The induced p-value for hypothesis 1 is 0. The induced p-value for
-hypothesis 2 is 0.0207. The induced p-value for hypothesis 3 is 0. Hence
-we fail to reject hypothesis 2 at a 2\% significance level and reject
-hypotheses 1 and 3 in favor of the alternative. We conclude that after
-adjusting for age \(\mu(A) < \mu(B) \leq \mu(C)\).
+hypothesis 2 is 0.0974. The induced p-value for hypothesis 3 is 0.0002.
+Hence we fail to reject hypothesis 2 at a 2\% significance level and
+reject hypotheses 1 and 3 in favor of the alternative. We conclude that
+after adjusting for age \(\mu(A) < \mu(B) \leq \mu(C)\).
 
 \hypertarget{one-more-check-that-age-is-irrelevant-when-comparing-citations}{%
 \subsection{One more check that age is irrelevant when comparing
@@ -499,7 +460,7 @@ This method was suggested by a friend as a final check to eliminate any
 question that age was the greatest confounder. We want to show that
 \(\mu(A) < \mu(B \cup C)\). We will randomly sample a population of 20
 from A, called \(X\). For each member \(x \in X\), we will find every
-person from B and C that is within a two year age interval from \(x\).
+person from B and C that is within a four year age interval from \(x\).
 We will randomly sample one, and induce a new population \(Y\). Then we
 will compare the means by storing X-Y. We repeat this 1,000 times and
 plot a histogram of the induced values. If 0 is within this new
@@ -509,7 +470,7 @@ primarily negative, then X \textless{} Y. Otherwise X \textgreater{} Y.
 We perform this analysis with both AMS citations and Google Scholar
 citations.
 
-\includegraphics{index_files/figure-latex/unnamed-chunk-36-1.pdf}
+\includegraphics{index_files/figure-latex/unnamed-chunk-31-1.pdf}
 
 When comparing mathscinet citations with this age matched randomization
 test, we see that none of the induced distribution is greater than or
@@ -518,7 +479,7 @@ equal to zero. So when comparing similarly aged apples to apples,
 
 We perform the same analysis with Google Scholar citations.
 
-\includegraphics{index_files/figure-latex/unnamed-chunk-38-1.pdf}
+\includegraphics{index_files/figure-latex/unnamed-chunk-33-1.pdf}
 
 When comparing Google Scholar citations with this age matched
 randomization test, we see that 18.1\% of the induced distribution is
@@ -526,7 +487,7 @@ greater than or equal to zero. So when comparing similarly aged apples
 to apples, it is inconclusive if \(A < B\cup C\). Of course, we wonder
 if this is actually Lior Pachter.
 
-\includegraphics{index_files/figure-latex/unnamed-chunk-40-1.pdf}
+\includegraphics{index_files/figure-latex/unnamed-chunk-35-1.pdf}
 
 When comparing Google Scholar citations, removing Pachter, with this age
 matched randomization test, we see that 2.7\% of the induced
@@ -547,7 +508,7 @@ wanted to investigate.
 We plot the average citations per year and note with a vertical line,
 the 36 (PhD) age cutoff.
 
-\includegraphics{index_files/figure-latex/unnamed-chunk-42-1.pdf}
+\includegraphics{index_files/figure-latex/unnamed-chunk-37-1.pdf}
 
 The maximum age since PhD of a letter signer of A is 49. If he were to
 cutoff his comparison at that point, clearly \(C>A\). If he were to
@@ -557,12 +518,12 @@ be accused of being biased.
 Notice the spike at age 21. This is caused by Lior Pachter. What would
 happen if we removed Pachter?
 
-\includegraphics{index_files/figure-latex/unnamed-chunk-44-1.pdf}
+\includegraphics{index_files/figure-latex/unnamed-chunk-39-1.pdf}
 
 Perhaps removing Lior was a confounder. So we remove the top five
 mathematicians from C.
 
-\includegraphics{index_files/figure-latex/unnamed-chunk-45-1.pdf}
+\includegraphics{index_files/figure-latex/unnamed-chunk-40-1.pdf}
 
 So it is clear that Pachter's analysis was some sort of magic trick,
 potentially a thought experiment, and a misleading one. It is highly
@@ -618,7 +579,7 @@ The average Math Sci Net Citations per year (PhD Age) is:
 \item
   For letter A - 15.98726
 \item
-  For letter B - 41.12345
+  For letter B - 41.86467
 \item
   For letter C - 55.5451
 \end{enumerate}
@@ -631,27 +592,26 @@ year of 16.17. By
 News}, University of Massachusetts - Amherst's Math Department has a
 rank of 55. Rutgers has an average citations per year of 35.01, so we
 retract our claim that letter B is comparable to Rutgers. It is closer
-to the University of Minesotta which has an average citations per year
-of 42.07 and a US News Ranking of 19. For Letter C, we claimed that it
-was another tier higher - indeed it is closer to the University of
-Chicago, which has an average citations per year of 56.27, ranked 6 by
-US News.
+to the University of Minesota which has an average citations per year of
+42.07 and a US News Ranking of 19. For Letter C, we claimed that it was
+another tier higher - indeed it is closer to the University of Chicago,
+which has an average citations per year of 56.27, ranked 6 by US News.
 
 An astute observer would notice we are not exactly comparing apples to
-apples. Presumably ones first publication could be before one finishes
+apples. Presumably one's first publication could be before one finishes
 their PhD. So even with the boost, the order amongst letter signers
 stands.
 
 \hypertarget{discussion-and-conclusion}{%
 \subsection{Discussion and Conclusion}\label{discussion-and-conclusion}}
 
-We have debunked the claim that age is the greatest contributor for the
-difference in citations and citations per year between signers of Letter
-A, B, and C. Indeed, the least meritorious of mathematicians as a whole
-signed letter A, whereas the more meritorious signed letters B and C,
-with merit judged by citations. If one was not willing to believe
-citations impose even a small order on merit, one could replace
-citations with Fields medals, AMS Fellowships, or many other metrics.
+We have debunked the claim that age is the confounder for the difference
+in citations and citations per year between signers of Letter A, B, and
+C. Indeed, the least meritorious of mathematicians as a whole signed
+letter A, whereas the more meritorious signed letters B and C, with
+merit judged by citations. If one was not willing to believe citations
+impose even a small order on merit, one could replace citations with
+Fields medals, AMS Fellowships, or many other metrics.
 
 In this analysis, we have addressed most of the criticisms in Pachter's
 review, acknowledging our errors when pointed, while rejecting his false

@@ -3,15 +3,12 @@ title: "Response to Pachter’s Review"
 author: "Joshua Paik and Igor Rivin"
 date: '1/22/2020, Last Update: 1/28/2020 6:00 P.M. G.M.T.'
 output:
-  html_document:
-    toc: yes
   pdf_document:
     keep_tex: yes
     toc: yes
+  html_document:
+    toc: yes
 ---
-
->*"Academic politics are so vicious precisely because the stakes are so small."*
-> - Henry Kissinger
 
 >*"The value of preprints is in their ability to accelerate research via the rapid dissemination of methods and discoveries."* 
 > - [Lior Pachter](https://liorpachter.wordpress.com/2019/10/21/zero-data-rna-seq/)
@@ -104,24 +101,18 @@ Now that we are comparing apples to apples, we reperform the main results.
 
 We will compare the mean number of citations and citations per year (that is years elapsed since completion of PhD) between signers of Letters A, B, and C. We will validate the significance of the difference between signers using a [permutation test](https://en.wikipedia.org/wiki/Resampling_(statistics)#Permutation_tests). 
 
-The following is copy and pasted from our paper (with edit in parentheses):
+A permutation test is a non-parametric means of assessing the significance test of a population. Throughout this section, we will be comparing the mean citations of two populations, X and Y. We will work under the assumption that our null hypothesis is $H_0: \mu(X) = \mu(Y)$, and our alternative is $H_1: \mu(X) < \mu(Y)$. 
 
-A permutation test is a nonparametric way of assessing the difference in mean between two populations. We are interested in whether an observed difference in mean is due to chance, and we can assess this in the following way.
+A permutation test works as follows. Let $X$ and $Y$ be our relevant populations, of size $n_X$ and $n_Y$. We would like to know whether we can accept that the observed difference in means was not due to chance. We record the observed difference in means as $\delta = \mu(X) - \mu(Y)$. We then take the union of our two population, $Z = X \cup Y$, and randomly partition $Z$ into two new sets $A$ and $B$, where $|A| = n_X$ and $|B| = n_Y$. We store $\mu(X)-\mu(Y)$ and induce a distribution $D$ of potential differences and repeat the process $n=10,000$ times. We can induce the p-value, or the probability that our observed difference was due to chance by the probability $p = |\{d:d\leq \delta, \forall d \in D\}|/n$. 
 
-0. Record the true difference in mean (or median) ($d\mu$).
-1. $H_0: d\mu = 0, H_1: d\mu < 0$
-2. Sample without replacement 1/2 of the combined data set (X) and what is left (Y)
-3. Take the mean (or median) of X and Y and record the difference
-4. Repeat 10,000 times and plot the histogram
-5. Record the number of points (m) in the induced distribution that is more extreme than or equal to the observed $d\mu$. The probability m/10,000 is the probability that what was observed was due to chance. 
-
-```{r, echo = FALSE, include = FALSE}
+```{r, echo = FALSE}
 # input data and the number of permutations
-meanPermutation <- function(Data, n){
+meanPermutation <- function(Data, n,n_a){
   output <- matrix(NA, ncol = 1, nrow = n)
+  p<-n_a/length(Data)
   for(i in 1:n){
-    #sample 1/2 of the data
-    X_index <- sample(1:length(Data), floor(0.5 * length(Data)))
+    #sample p% of the data
+    X_index <- sample(1:length(Data), floor(p * length(Data)))
     Y_index <- setdiff(1:length(Data), X_index)
     X <- Data[X_index]
     Y <- Data[Y_index]
@@ -134,13 +125,14 @@ meanPermutation <- function(Data, n){
 }
 ```
 
-```{r, echo = FALSE, include = FALSE}
+```{r, echo = FALSE}
 # input data and the number of permutations
-medianPermutation <- function(Data, n){
+medianPermutation <- function(Data, n,n_a){
   output <- matrix(NA, ncol = 1, nrow = n)
+  p<-n_a/length(Data)
   for(i in 1:n){
-    #sample 1/2 of the data
-    X_index <- sample(1:length(Data), floor(0.5 * length(Data)))
+    #sample p% of the data
+    X_index <- sample(1:length(Data), floor(p * length(Data)))
     Y_index <- setdiff(1:length(Data), X_index)
     X <- Data[X_index]
     Y <- Data[Y_index]
@@ -187,9 +179,7 @@ The three hypotheses we would like to assess are:
 
 3. $H_0: \mu(A) = \mu(C), H_1: \mu(A) < \mu(C)$
 
-In the following figure, the vertical red bar is the observed difference for hypothesis 1 in the induced distribution, blue is the observed difference for hypothesis 2, and green is the observed difference for hypothesis 3. 
-
-```{r, echo=FALSE}
+```{r, include = FALSE, echo = FALSE}
 muA <- mean(filter(df, ((lettergroup == "A Only"|lettergroup == "A and B")&(role=="professor")))$amscit, na.rm = TRUE)
 muB <- mean(filter(df, ((lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B")&(role=="professor")))$amscit, na.rm = TRUE)
 muC <- mean(filter(df, ((lettergroup == "C Only"|lettergroup == "B and C")&(role=="professor")))$amscit, na.rm = TRUE)
@@ -199,23 +189,23 @@ val2 <- muB - muC
 val3 <- muA - muC
 
 set.seed(0)
-dist <- meanPermutation(na.omit(df$amscit),10000)
+pop <- filter(df, (institution=="domesticr1"&field=="math"&role=="professor"))
 
-hist(dist,
-     main = "Permutation Test on MSN cits only R1 Math Professors",
-     xlab = "Differences in Mean")
-abline(v=val1, col = "red")
-abline(v=val2, col = "blue")
-abline(v=val3, col = "green")
+n_a <- length(na.omit(filter(df, (lettergroup == "A Only"|lettergroup == "A and B")&(role=="professor"))$amscit))
+n_b <- length(na.omit(filter(df, (lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B")&(role=="professor"))$amscit))
+n_c <- length(na.omit(filter(df, (lettergroup == "C Only"|lettergroup == "B and C")&(role=="professor"))$amscit))
 
+dist1 <- meanPermutation(na.omit(filter(df,(lettergroup == "A Only"|lettergroup == "A and B"|lettergroup == "B and C"|lettergroup == "B Only"))$amscit),10000,n_a)
+dist2 <- meanPermutation(na.omit(filter(df,lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B"|lettergroup == "C Only")$amscit),10000,n_b)
+dist3 <- meanPermutation(na.omit(filter(df,lettergroup == "A Only"|lettergroup == "A and B"|lettergroup == "C Only"|lettergroup == "B and C")$amscit),10000,n_c)
+
+
+sum(dist1 < val1)/length(dist1)
+sum(dist2 < val2)/length(dist2)
+sum(dist3 < val3)/length(dist3)
 ```
-```{r, echo=FALSE, include = FALSE}
-sum(dist < val1)/length(dist)
-sum(dist < val2)/length(dist)
-sum(dist < val3)/length(dist)
-```
 
-The induced p-value for hypothesis 1 is 0. The induced p-value for hypothesis 2 is 0.0002. The induced p-value for hypothesis 3 is 0. Hence we reject all three null hypotheses in favor of the alternative, and $\mu(A) < \mu(B) < \mu(C)$. 
+The induced p-value for hypothesis 1 is 0. The induced p-value for hypothesis 2 is 0.0016. The induced p-value for hypothesis 3 is 0. Hence we reject all three null hypotheses in favor of the alternative, and $\mu(A) < \mu(B) < \mu(C)$. 
 
 ### MathSciNet Citations per Year for R1 Math Professors
 
@@ -254,55 +244,37 @@ The three hypotheses we would like to assess are:
 
 3. $H_0: \mu(A_{citperyear}) = \mu(C_{citperyear}), H_1: \mu(A_{citperyear}) < \mu(C_{citperyear})$
 
-As above, the vertical red bar is the observed difference for hypothesis 1 in the induced distribution, blue is the observed difference for hypothesis 2, and green is the observed difference for hypothesis 3.
 
-```{r, echo = FALSE}
-muA <- mean(filter(df, (lettergroup == "A Only"|lettergroup == "A and B"))$amscitperyear, na.rm = TRUE)
-muB <- mean(filter(df, (lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B"))$amscitperyear, na.rm = TRUE)
-muC <- mean(filter(df, (lettergroup == "C Only"|lettergroup == "B and C"))$amscitperyear, na.rm = TRUE)
-
-val1 <- muA - muB
-val2 <- muB - muC
-val3 <- muA - muC
-
-set.seed(0)
-dist <- meanPermutation(na.omit(df$amscitperyear),10000)
-
-hist(dist,
-     main = "Permutation Test MSN citperyear R1 Math Professors",
-     xlab = "Differences in Mean")
-abline(v=val1, col = "red")
-abline(v=val2, col = "blue")
-abline(v=val3, col = "green")
-```
-```{r, echo=FALSE, include = FALSE}
-sum(dist < val1)/length(dist)
-sum(dist < val2)/length(dist)
-sum(dist < val3)/length(dist)
-```
-
-The induced p-value for hypothesis 1 is 0. The induced p-value for hypothesis 2 is 0.0099. The induced p-value for hypothesis 3 is 0. Hence we reject all three null hypotheses, even assessing the induced p-value at a 2% significance level, in favor of the alternative, and we conclude that $\mu(A_{citperyear}) < \mu(B_{citperyear}) < \mu(C_{citperyear})$. 
-
-One may object of our usage of the mean here, opposed to the median. So we reperform the permutation test with the median. All three induced p-values are 0 so we can reject all three null hypotheses when comparing median citations per year. 
-
-```{r, echo=FALSE, include = FALSE}
-muA <- median(filter(df, (lettergroup == "A Only"|lettergroup == "A and B"))$amscitperyear, na.rm = TRUE)
-muB <- median(filter(df, (lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B"))$amscitperyear, na.rm = TRUE)
-muC <- median(filter(df, (lettergroup == "C Only"|lettergroup == "B and C"))$amscitperyear, na.rm = TRUE)
+```{r, include = FALSE, echo = FALSE}
+muA <- mean(filter(df, (lettergroup == "A Only"|lettergroup == "A and B")&institution=="domesticr1"&field=="math"&(role=="professor"))$amscitperyear, na.rm = TRUE)
+muB <- mean(filter(df, (lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B")&institution=="domesticr1"&field=="math"&(role=="professor"))$amscitperyear, na.rm = TRUE)
+muC <- mean(filter(df, (lettergroup == "C Only"|lettergroup == "B and C")&institution=="domesticr1"&field=="math"&(role=="professor"))$amscitperyear, na.rm = TRUE)
 
 val1 <- muA - muB
 val2 <- muB - muC
 val3 <- muA - muC
 
 set.seed(0)
-dist <- medianPermutation(na.omit(df$amscitperyear),10000)
+
+
+n_a <- length(na.omit(filter(df, (lettergroup == "A Only"|lettergroup == "A and B")&institution=="domesticr1"&field=="math"&(role=="professor"))$amscitperyear))
+n_b <- length(na.omit(filter(df, (lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B")&institution=="domesticr1"&field=="math"&(role=="professor"))$amscitperyear))
+n_c <- length(na.omit(filter(df, (lettergroup == "C Only"|lettergroup == "B and C")&institution=="domesticr1"&field=="math"&(role=="professor"))$amscitperyear))
+
+
+pop<- filter(df, ((role=="professor")&field=="math"&institution=="domesticr1"))
+
+dist1 <- meanPermutation(na.omit(filter(pop,(lettergroup == "A Only"|lettergroup == "A and B"|lettergroup == "B and C"|lettergroup == "B Only"))$amscitperyear),10000,n_a)
+dist2 <- meanPermutation(na.omit(filter(pop,lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B"|lettergroup == "C Only")$amscitperyear),10000,n_b)
+dist3 <- meanPermutation(na.omit(filter(pop,lettergroup == "A Only"|lettergroup == "A and B"|lettergroup == "C Only"|lettergroup == "B and C")$amscitperyear),10000,n_c)
+
+
+sum(dist1 < val1)/length(dist1)
+sum(dist1 < val2)/length(dist2)
+sum(dist1 < val3)/length(dist3)
 ```
 
-```{r, echo=FALSE, include = FALSE}
-sum(dist < val1)/length(dist)
-sum(dist < val2)/length(dist)
-sum(dist < val3)/length(dist)
-```
+The induced p-value for hypothesis 1 is 0. The induced p-value for hypothesis 2 is 0.07788. The induced p-value for hypothesis 3 is 0. Hence we reject hypothesis 1 and 3, and conclude that $\mu(A_{citperyear}) < \mu(B_{citperyear}) \leq \mu(C_{citperyear})$. 
 
 ## There is no evidence that Citations per Year grows with age
 
@@ -426,9 +398,7 @@ The three hypotheses we would like to assess are:
 
 3. $H_0: \mu(A_{citperyear^{1.3}}) = \mu(C_{citperyear^{1.3}}), H_1: \mu(A_{citperyear^{1.3}}) < \mu(C_{citperyear^{1.3}})$
 
-As above, the vertical red bar is the observed difference for hypothesis 1 in the induced distribution, blue is the observed difference for hypothesis 2, and green is the observed difference for hypothesis 3.
-
-```{r, echo = FALSE}
+```{r, include = FALSE, echo = FALSE}
 muA <- mean(filter(df, (lettergroup == "A Only"|lettergroup == "A and B"))$amscitperyearpower, na.rm = TRUE)
 muB <- mean(filter(df, (lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B"))$amscitperyearpower, na.rm = TRUE)
 muC <- mean(filter(df, (lettergroup == "C Only"|lettergroup == "B and C"))$amscitperyearpower, na.rm = TRUE)
@@ -438,22 +408,24 @@ val2 <- muB - muC
 val3 <- muA - muC
 
 set.seed(0)
-dist <- meanPermutation(na.omit(df$amscitperyearpower),10000)
+n_a <- length(na.omit(filter(df, (lettergroup == "A Only"|lettergroup == "A and B")&institution=="domesticr1"&field=="math"&(role=="professor"))$amscitperyearpower))
+n_b <- length(na.omit(filter(df, (lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B")&institution=="domesticr1"&field=="math"&(role=="professor"))$amscitperyearpower))
+n_c <- length(na.omit(filter(df, (lettergroup == "C Only"|lettergroup == "B and C")&institution=="domesticr1"&field=="math"&(role=="professor"))$amscitperyearpower))
 
-hist(dist,
-     main = "Permutation Test MSN citperyear^1.3 R1 Math Professors",
-     xlab = "Differences in Mean")
-abline(v=val1, col = "red")
-abline(v=val2, col = "blue")
-abline(v=val3, col = "green")
-```
-```{r, echo=FALSE, include = FALSE}
-sum(dist < val1)/length(dist)
-sum(dist < val2)/length(dist)
-sum(dist < val3)/length(dist)
+
+pop<- filter(df, ((role=="professor")&field=="math"&institution=="domesticr1"))
+
+dist1 <- meanPermutation(na.omit(filter(pop,(lettergroup == "A Only"|lettergroup == "A and B"|lettergroup == "B and C"|lettergroup == "B Only"))$amscitperyearpower),10000,n_a)
+dist2 <- meanPermutation(na.omit(filter(pop,lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B"|lettergroup == "C Only")$amscitperyearpower),10000,n_b)
+dist3 <- meanPermutation(na.omit(filter(pop,lettergroup == "A Only"|lettergroup == "A and B"|lettergroup == "C Only"|lettergroup == "B and C")$amscitperyearpower),10000,n_c)
+
+
+sum(dist1 < val1)/length(dist1)
+sum(dist2 < val2)/length(dist2)
+sum(dist3 < val3)/length(dist3)
 ```
 
-The induced p-value for hypothesis 1 is 0. The induced p-value for hypothesis 2 is 0.0207. The induced p-value for hypothesis 3 is 0. Hence we fail to reject hypothesis 2 at a 2% significance level and reject hypotheses 1 and 3 in favor of the alternative. We conclude that after adjusting for age $\mu(A) < \mu(B) \leq \mu(C)$.
+The induced p-value for hypothesis 1 is 0. The induced p-value for hypothesis 2 is 0.0974. The induced p-value for hypothesis 3 is 0.0002. Hence we fail to reject hypothesis 2 at a 2% significance level and reject hypotheses 1 and 3 in favor of the alternative. We conclude that after adjusting for age $\mu(A) < \mu(B) \leq \mu(C)$.
 
 ## One more check that age is irrelevant when comparing citations
 
@@ -752,16 +724,16 @@ The top 11 departments using this ranking are:
 We calculate the average citations per year since PhD of letters A, B, and C, and compare them to our ranked list. 
 
 ```{r, echo = FALSE, include = FALSE}
-mean(filter(df, (lettergroup == "A Only"|lettergroup == "A and B"))$amscitperyear, na.rm = TRUE)
-mean(filter(df, (lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B"))$amscitperyear, na.rm = TRUE)
-mean(filter(df, (lettergroup == "C Only"|lettergroup == "B and C"))$amscitperyear, na.rm = TRUE)
+mean(filter(df, (lettergroup == "A Only"|lettergroup == "A and B")&role=="professor")$amscitperyear, na.rm = TRUE)
+mean(filter(df, (lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B")&role=="professor")$amscitperyear, na.rm = TRUE)
+mean(filter(df, (lettergroup == "C Only"|lettergroup == "B and C")&role=="professor")$amscitperyear, na.rm = TRUE)
 ```
 
 The average Math Sci Net Citations per year (PhD Age) is:
 
 1. For letter A - 15.98726
 
-2. For letter B - 41.12345
+2. For letter B - 41.86467
 
 3. For letter C - 55.5451
 
