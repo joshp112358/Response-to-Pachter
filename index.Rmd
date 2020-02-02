@@ -149,22 +149,22 @@ medianPermutation <- function(Data, n,n_a){
 
 ```{r, warning=FALSE, echo = FALSE}
 plot4 <- ggplot(df, aes(x=amscit))+
-  geom_histogram(data=filter(df, ((lettergroup == "A Only"|lettergroup == "A and B")&(role=="professor"))),fill = "red", alpha = 0.2, binwidth = 1000) + 
-  geom_histogram(data=filter(df, ((lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B")&(role=="professor"))),fill = "blue", alpha = 0.2, binwidth = 1000) +
-  geom_histogram(data=filter(df,( (lettergroup == "C Only"|lettergroup == "B and C")&(role=="professor"))),fill = "green", alpha = 0.2, binwidth = 1000) +
-  geom_vline(xintercept = mean(filter(df, ((lettergroup == "A Only"|lettergroup == "A and B")&(role=="professor")))$amscit, na.rm = TRUE), linetype="dotted", color = "red", size=1.5) +
-  geom_vline(xintercept = mean(filter(df,( (lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B")&(role=="professor")))$amscit, na.rm = TRUE), linetype="dotted", color = "blue", size=1.5) +
-  geom_vline(xintercept = mean(filter(df, ((lettergroup == "C Only"|lettergroup == "B and C")&(role=="professor")))$amscit, na.rm = TRUE), linetype="dotted", color = "green", size=1.5) +
+  geom_histogram(data=filter(df, ((lettergroup == "A Only"|lettergroup == "A and B")&institution=="domesticr1"&field=="math"&(role=="professor"))),fill = "red", alpha = 0.2, binwidth = 1000) + 
+  geom_histogram(data=filter(df, ((lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B")&(role=="professor")&institution=="domesticr1"&field=="math")),fill = "blue", alpha = 0.2, binwidth = 1000) +
+  geom_histogram(data=filter(df,( (lettergroup == "C Only"|lettergroup == "B and C")&institution=="domesticr1"&field=="math"&(role=="professor"))),fill = "green", alpha = 0.2, binwidth = 1000) +
+  geom_vline(xintercept = mean(filter(df, ((lettergroup == "A Only"|lettergroup == "A and B")&(role=="professor")&institution=="domesticr1"&field=="math"))$amscit, na.rm = TRUE), linetype="dotted", color = "red", size=1.5) +
+  geom_vline(xintercept = mean(filter(df,( (lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B")&(role=="professor")&institution=="domesticr1"&field=="math"))$amscit, na.rm = TRUE), linetype="dotted", color = "blue", size=1.5) +
+  geom_vline(xintercept = mean(filter(df, ((lettergroup == "C Only"|lettergroup == "B and C")&(role=="professor")&institution=="domesticr1"&field=="math"))$amscit, na.rm = TRUE), linetype="dotted", color = "green", size=1.5) +
   ggtitle("Math Sci Net Citations Comparison Professors (A=red), (B=blue), (C=green)")
 plot4
 ```
-```{r, echo = FALSE, include = FALSE}
-mean(filter(df, ((lettergroup == "A Only"|lettergroup == "A and B")&(role=="professor")&(field=="math")))$amscit, na.rm = TRUE)
-mean(filter(df, ((lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B")&(role=="professor")&(field=="math")))$amscit, na.rm = TRUE)
-mean(filter(df, ((lettergroup == "C Only"|lettergroup == "B and C")&(role=="professor")&(field=="math")))$amscit, na.rm = TRUE)
-median(filter(df, ((lettergroup == "A Only"|lettergroup == "A and B")&(role=="professor")&(field=="math")))$amscit, na.rm = TRUE)
-median(filter(df, ((lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B")&(role=="professor")&(field=="math")))$amscit, na.rm = TRUE)
-median(filter(df, ((lettergroup == "C Only"|lettergroup == "B and C")&(role=="professor")&(field=="math")))$amscit, na.rm = TRUE)
+```{r, echo = FALSE,include=FALSE}
+mean(filter(df, ((lettergroup == "A Only"|lettergroup == "A and B")&institution=="domesticr1"&(role=="professor")&(field=="math")))$amscit, na.rm = TRUE)
+mean(filter(df, ((lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B")&institution=="domesticr1"&(role=="professor")&(field=="math")))$amscit, na.rm = TRUE)
+mean(filter(df, ((lettergroup == "C Only"|lettergroup == "B and C")&institution=="domesticr1"&(role=="professor")&(field=="math")))$amscit, na.rm = TRUE)
+median(filter(df, ((lettergroup == "A Only"|lettergroup == "A and B")&(role=="professor")&institution=="domesticr1"&(field=="math")))$amscit, na.rm = TRUE)
+median(filter(df, ((lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B")&(role=="professor")&institution=="domesticr1"&(field=="math")))$amscit, na.rm = TRUE)
+median(filter(df, ((lettergroup == "C Only"|lettergroup == "B and C")&(role=="professor")&institution=="domesticr1"&(field=="math")))$amscit, na.rm = TRUE)
 ```
 
 The mean number of citations for signers of letter A is 397 and the median is 261.
@@ -180,9 +180,9 @@ The three hypotheses we would like to assess are:
 3. $H_0: \mu(A) = \mu(C), H_1: \mu(A) < \mu(C)$
 
 ```{r, include = FALSE, echo = FALSE}
-muA <- mean(filter(df, ((lettergroup == "A Only"|lettergroup == "A and B")&(role=="professor")))$amscit, na.rm = TRUE)
-muB <- mean(filter(df, ((lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B")&(role=="professor")))$amscit, na.rm = TRUE)
-muC <- mean(filter(df, ((lettergroup == "C Only"|lettergroup == "B and C")&(role=="professor")))$amscit, na.rm = TRUE)
+muA <- mean(filter(df, ((lettergroup == "A Only"|lettergroup == "A and B")&institution=="domesticr1"&(field=="math")&(role=="professor")))$amscit, na.rm = TRUE)
+muB <- mean(filter(df, ((lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B")&institution=="domesticr1"&(field=="math")&(role=="professor")))$amscit, na.rm = TRUE)
+muC <- mean(filter(df, ((lettergroup == "C Only"|lettergroup == "B and C")&institution=="domesticr1"&(field=="math")&(role=="professor")))$amscit, na.rm = TRUE)
 
 val1 <- muA - muB
 val2 <- muB - muC
@@ -191,9 +191,9 @@ val3 <- muA - muC
 set.seed(0)
 pop <- filter(df, (institution=="domesticr1"&field=="math"&role=="professor"))
 
-n_a <- length(na.omit(filter(df, (lettergroup == "A Only"|lettergroup == "A and B")&(role=="professor"))$amscit))
-n_b <- length(na.omit(filter(df, (lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B")&(role=="professor"))$amscit))
-n_c <- length(na.omit(filter(df, (lettergroup == "C Only"|lettergroup == "B and C")&(role=="professor"))$amscit))
+n_a <- length(na.omit(filter(df, institution=="domesticr1"&field=="math"&(lettergroup == "A Only"|lettergroup == "A and B")&(role=="professor"))$amscit))
+n_b <- length(na.omit(filter(df, institution=="domesticr1"&field=="math"&(lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B")&(role=="professor"))$amscit))
+n_c <- length(na.omit(filter(df, institution=="domesticr1"&field=="math"&(lettergroup == "C Only"|lettergroup == "B and C")&(role=="professor"))$amscit))
 
 dist1 <- meanPermutation(na.omit(filter(df,(lettergroup == "A Only"|lettergroup == "A and B"|lettergroup == "B and C"|lettergroup == "B Only"))$amscit),10000,n_a)
 dist2 <- meanPermutation(na.omit(filter(df,lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B"|lettergroup == "C Only")$amscit),10000,n_b)
@@ -213,28 +213,28 @@ Of course, we considered the fact that citations grow with age, so we calculated
 
 ```{r , warning=FALSE, echo = FALSE}
 plot9 <- ggplot(df, aes(x=amscitperyear))+
-  geom_histogram(data=filter(df, (lettergroup == "A Only"|lettergroup == "A and B")),fill = "red", alpha = 0.2, binwidth = 50) + 
-  geom_histogram(data=filter(df, (lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B")),fill = "blue", alpha = 0.2, binwidth = 50) +
-  geom_histogram(data=filter(df, (lettergroup == "C Only"|lettergroup == "B and C")),fill = "green", alpha = 0.2, binwidth = 50) +
-  geom_vline(xintercept = mean(filter(df, (lettergroup == "A Only"|lettergroup == "A and B"))$amscitperyear, na.rm = TRUE), linetype="dotted", color = "red", size=1.5) +
-  geom_vline(xintercept = mean(filter(df, (lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B"))$amscitperyear, na.rm = TRUE), linetype="dotted", color = "blue", size=1.5) +
-  geom_vline(xintercept = mean(filter(df, (lettergroup == "C Only"|lettergroup == "B and C"))$amscitperyear, na.rm = TRUE), linetype="dotted", color = "green", size=1.5) +
+  geom_histogram(data=filter(df, (lettergroup == "A Only"|lettergroup == "A and B")&institution=="domesticr1"&field=="math"&role=="professor"),fill = "red", alpha = 0.2, binwidth = 50) + 
+  geom_histogram(data=filter(df, (lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B")&institution=="domesticr1"&field=="math"&role=="professor"),fill = "blue", alpha = 0.2, binwidth = 50) +
+  geom_histogram(data=filter(df, (lettergroup == "C Only"|lettergroup == "B and C")&institution=="domesticr1"&field=="math"&role=="professor"),fill = "green", alpha = 0.2, binwidth = 50) +
+  geom_vline(xintercept = mean(filter(df, (lettergroup == "A Only"|lettergroup == "A and B")&institution=="domesticr1"&field=="math"&role=="professor")$amscitperyear, na.rm = TRUE), linetype="dotted", color = "red", size=1.5) +
+  geom_vline(xintercept = mean(filter(df, (lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B")&institution=="domesticr1"&field=="math"&role=="professor")$amscitperyear, na.rm = TRUE), linetype="dotted", color = "blue", size=1.5) +
+  geom_vline(xintercept = mean(filter(df, (lettergroup == "C Only"|lettergroup == "B and C")&institution=="domesticr1"&field=="math"&role=="professor")$amscitperyear, na.rm = TRUE), linetype="dotted", color = "green", size=1.5) +
   ggtitle("MathSciNet citperyear Comparison (A=red), (B=blue), (C=green)")
 plot9
 ```
 
-```{r, echo = FALSE, include= FALSE}
-mean(filter(df, (lettergroup == "A Only"|lettergroup == "A and B"))$amscitperyear, na.rm = TRUE)
-mean(filter(df, (lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B"))$amscitperyear, na.rm = TRUE)
-mean(filter(df, (lettergroup == "C Only"|lettergroup == "B and C"))$amscitperyear, na.rm = TRUE)
-median(filter(df, (lettergroup == "A Only"|lettergroup == "A and B"))$amscitperyear, na.rm = TRUE)
-median(filter(df, (lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B"))$amscitperyear, na.rm = TRUE)
-median(filter(df, (lettergroup == "C Only"|lettergroup == "B and C"))$amscitperyear, na.rm = TRUE)
+```{r, echo = FALSE,include=FALSE}
+mean(filter(df, (lettergroup == "A Only"|lettergroup == "A and B")&institution=="domesticr1"&field=="math"&role=="professor")$amscitperyear, na.rm = TRUE)
+mean(filter(df, (lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B")&institution=="domesticr1"&field=="math"&role=="professor")$amscitperyear, na.rm = TRUE)
+mean(filter(df, (lettergroup == "C Only"|lettergroup == "B and C")&institution=="domesticr1"&field=="math"&role=="professor")$amscitperyear, na.rm = TRUE)
+median(filter(df, (lettergroup == "A Only"|lettergroup == "A and B")&institution=="domesticr1"&field=="math"&role=="professor")$amscitperyear, na.rm = TRUE)
+median(filter(df, (lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B")&institution=="domesticr1"&field=="math"&role=="professor")$amscitperyear, na.rm = TRUE)
+median(filter(df, (lettergroup == "C Only"|lettergroup == "B and C")&institution=="domesticr1"&field=="math"&role=="professor")$amscitperyear, na.rm = TRUE)
 ```
 
 The mean number of citations per year for signers of letter A is 16 and the median is 11.
-The mean number of citations per year for signers of letter B is 41 and the median is 26.
-The mean number of citations per year for signers of letter C is 56 and the median is 42.
+The mean number of citations per year for signers of letter B is 42 and the median is 27.
+The mean number of citations per year for signers of letter C is 55 and the median is 42.
 
 The three hypotheses we would like to assess are:
 
@@ -723,10 +723,10 @@ The top 11 departments using this ranking are:
 
 We calculate the average citations per year since PhD of letters A, B, and C, and compare them to our ranked list. 
 
-```{r, echo = FALSE, include = FALSE}
-mean(filter(df, (lettergroup == "A Only"|lettergroup == "A and B")&role=="professor")$amscitperyear, na.rm = TRUE)
-mean(filter(df, (lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B")&role=="professor")$amscitperyear, na.rm = TRUE)
-mean(filter(df, (lettergroup == "C Only"|lettergroup == "B and C")&role=="professor")$amscitperyear, na.rm = TRUE)
+```{r, echo = FALSE,include=FALSE}
+mean(filter(df, (lettergroup == "A Only"|lettergroup == "A and B")&institution=="domesticr1"&field=="math"&role=="professor")$amscitperyear, na.rm = TRUE)
+mean(filter(df, (lettergroup == "B and C"|lettergroup == "B Only"|lettergroup == "A and B")&institution=="domesticr1"&field=="math"&role=="professor")$amscitperyear, na.rm = TRUE)
+mean(filter(df, (lettergroup == "C Only"|lettergroup == "B and C")&institution=="domesticr1"&field=="math"&role=="professor")$amscitperyear, na.rm = TRUE)
 ```
 
 The average Math Sci Net Citations per year (PhD Age) is:
@@ -735,7 +735,7 @@ The average Math Sci Net Citations per year (PhD Age) is:
 
 2. For letter B - 41.86467
 
-3. For letter C - 55.5451
+3. For letter C - 55.3615
 
 Temple has an average citations per year of 12.33, so we retract our claim that letter A is comparable to Temple. It is closer to the University of Massachusetts - Amherst  which has an average citations per year of 16.17. By [US News](https://www.usnews.com/best-graduate-schools/top-science-schools/mathematics-rankings), University of Massachusetts - Amherst's Math Department has a rank of 55. Rutgers has an average citations per year of 35.01, so we retract our claim that letter B is comparable to Rutgers. It is closer to the University of Minesota which has an average citations per year of 42.07 and a US News Ranking of 19. For Letter C, we claimed that it was another tier higher - indeed it is closer to the University of Chicago, which has an average citations per year of 56.27, ranked 6 by US News. 
 
